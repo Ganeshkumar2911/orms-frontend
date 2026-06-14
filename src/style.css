@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+@import "tailwindcss";
+
+
+@theme {
+  --color-primary-blue: #3c83f6;
+
+  --color-background: #f8fafc;
+  --color-card-background: #fff;
+  --color-primary-border: #eaeff4;
+
+  --color-secondary-text: #5c6f8a;
+  --color-primary-text: #000;
+
+  --color-primary-green: #34d399;
+  --color-primary-yellow: #fbbf24;
+  --color-primary-red: #f87171;
+
+  /* Order Status Colors */
+  --color-status-created: #94a3b8;
+  --color-status-approved: #3c83f6;
+  --color-status-executed: #fb923c;
+  --color-status-partial: #fbbf24;
+  --color-status-completed: #34d399;
+  --color-status-cancelled: #f87171;
+
+  /* Pending Quantity */
+  --color-pending: #a855f7;
+}
+
+.dark {
+  --color-primary-blue: #3c83f6;
+
+  --color-background: #0f1729;
+  --color-card-background: #131d34;
+  --color-primary-border: #ffffff11;
+
+  --color-secondary-text: #7588a3;
+  --color-primary-text: #fff;
+
+  --color-primary-green: #34d399;
+  --color-primary-yellow: #fbbf24;
+  --color-primary-red: #f87171;
+
+  /* Order Status Colors */
+  --color-status-created: #94a3b8;
+  --color-status-approved: #3c83f6;
+  --color-status-executed: #fb923c;
+  --color-status-partial: #fbbf24;
+  --color-status-completed: #34d399;
+  --color-status-cancelled: #f87171;
+
+  /* Pending Quantity */
+  --color-pending: #a855f7;
+}
+
+.label-text {
+  @apply text-[12px] text-secondary-text font-medium;
+}
+
+body{
+    font-family: "Red Hat Display", sans-serif;
+}
+
+.title-text {
+    @apply font-semibold text-[19px];
+}
+
+.sub-text {
+    @apply text-[13px];
+}
+
+.normal-text {
+    @apply text-[16px] font-medium;
+}
+
+.mid-text{
+    @apply text-[14px]
+}
+
+.input-field {
+    @apply w-full bg-primary-border/10 border border-primary-border rounded-lg px-3 py-2 text-sm text-primary-text placeholder-secondary-text/50 focus:outline-none focus:border-primary-blue/60 focus:ring-1 focus:ring-primary-blue/20 transition-colors duration-150;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE & old Edge */
+  scrollbar-width: none;     /* Firefox */
+}
