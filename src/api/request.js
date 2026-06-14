@@ -3,7 +3,7 @@ import router from "../router";
 
 // ─── Constants
 
-const BASE_URL = "https://oms-backend-git-main-ganesh-kumars-projects-cfdf3ac6.vercel.app/api/";
+const BASE_URL = "https://oms-backend-seven.vercel.app/api/";
 const DEFAULT_TIMEOUT = 30_000;
 const MAX_RETRY_ATTEMPTS = 2;
 const RETRYABLE_STATUS_CODES = [502, 503, 504];

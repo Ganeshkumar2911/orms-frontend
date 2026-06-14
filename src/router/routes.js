@@ -35,12 +35,12 @@ const routes = [
         component: () => import('@/pages/orders/index.vue'),
         meta: { title: 'Orders' }
       },
-      {
-        path: 'orders/:id',
-        name: 'order-details',
-        component: () => import('@/pages/orders/orderDetails.vue'),
-        meta: { title: 'Order Details', showBackButton: true }
-      },
+    {
+    path: 'orders/:id',
+    name: 'order-details',
+    component: () => import('@/pages/orders/orderDetails.vue'),
+    meta: { title: 'Order Details', showBackButton: true }
+    },
       {
         path: 'products',
         name: 'products',
