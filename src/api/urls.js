@@ -26,6 +26,11 @@ const urls = {
     list: '/party/get',
     create: '/party/create',
     update: '/party/update',
+  },
+  orders: {
+    list: '/order/get',
+    create: '/order/create',
+    update: '/order/update',
   }
 }
 

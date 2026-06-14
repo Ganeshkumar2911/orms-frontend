@@ -26,11 +26,11 @@ const isActive = (path) => route.path.startsWith(path)
       <component
         :is="tab.icon"
         :size="22"
-        :class="isActive(tab.path) ? 'text-primary-blue' : 'text-secondary-text'"
+        :class="isActive(tab.path) ? 'text-primary-accent' : 'text-secondary-text'"
       />
       <span
         class="label-text"
-        :class="isActive(tab.path) ? 'text-primary-blue' : 'text-secondary-text'"
+        :class="isActive(tab.path) ? 'text-primary-accent' : 'text-secondary-text'"
       >
         {{ tab.name }}
       </span>

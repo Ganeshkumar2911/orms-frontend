@@ -20,6 +20,12 @@ const routes = [
     component: DefaultLayout,
     children: [
       {
+        path: 'orders',
+        name: 'orders',
+        component: () => import('@/pages/orders/index.vue'),
+        meta: { title: 'Orders' }
+      },
+      {
         path: 'products',
         name: 'products',
         component: ProductsView,

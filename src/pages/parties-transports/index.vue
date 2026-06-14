@@ -1,11 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Users, Truck } from 'lucide-vue-next'
+import { Users, Truck, Search } from 'lucide-vue-next'
 import { usePartiesStore } from '@/stores/parties/parties'
 import { useTransportsStore } from '@/stores/transports/transports'
 import PartyDialog from '@/components/parties/PartyDialog.vue'
 import TransportDialog from '@/components/transports/TransportDialog.vue'
-import BasePagination from '@/components/common/BasePagination.vue'
 
 const partiesStore = usePartiesStore()
 const transportsStore = useTransportsStore()
@@ -38,7 +37,7 @@ onMounted(() => partiesStore.fetchParties())
     <div class="flex bg-card-background border border-primary-border rounded-xl p-1 gap-1">
       <button
         @click="switchTab('parties')"
-        :class="activeTab === 'parties' ? 'bg-primary-blue text-white' : 'text-secondary-text'"
+        :class="activeTab === 'parties' ? 'bg-primary-accent text-white' : 'text-secondary-text'"
         class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg mid-text transition-all"
       >
         <Users :size="16" />
@@ -46,7 +45,7 @@ onMounted(() => partiesStore.fetchParties())
       </button>
       <button
         @click="switchTab('transports')"
-        :class="activeTab === 'transports' ? 'bg-primary-blue text-primary-text' : 'text-secondary-text'"
+        :class="activeTab === 'transports' ? 'bg-primary-accent text-primary-text' : 'text-secondary-text'"
         class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg mid-text transition-all"
       >
         <Truck :size="16" />
@@ -56,11 +55,23 @@ onMounted(() => partiesStore.fetchParties())
 
     <!-- ── PARTIES ── -->
     <template v-if="activeTab === 'parties'">
-      <div class="flex items-center justify-end">
+      <div class="flex items-center gap-3">
+        <div class="relative flex-1">
+          <Search
+            :size="16"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-text"
+          />
+          <input
+            v-model="partiesStore.search"
+            type="text"
+            placeholder="Search parties..."
+            class="input-field !pl-10 h-10"
+          />
+        </div>
         <!-- <span class="title-text text-white">Parties</span> -->
         <button
           @click="partiesStore.openCreateDialog()"
-          class="bg-primary-blue text-white px-3 py-2 rounded-lg text-xs"
+          class="bg-primary-accent text-white px-3 py-2 rounded-lg text-xs"
         >
           + New
         </button>
@@ -103,11 +114,23 @@ onMounted(() => partiesStore.fetchParties())
 
     <!-- ── TRANSPORTS ── -->
     <template v-if="activeTab === 'transports'">
-      <div class="flex items-center justify-end">
+      <div class="flex items-center gap-3">
+        <div class="relative flex-1">
+          <Search
+            :size="16"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-text"
+          />
+          <input
+            v-model="transportsStore.search"
+            type="text"
+            placeholder="Search transports..."
+            class="input-field !pl-10 h-10"
+          />
+        </div>
         <!-- <span class="title-text text-white">Transports</span> -->
         <button
           @click="transportsStore.openCreateDialog()"
-          class="bg-primary-blue text-white px-3 py-2 rounded-lg text-xs"
+          class="bg-primary-accent text-white px-3 py-2 rounded-lg text-xs"
         >
           + New
         </button>

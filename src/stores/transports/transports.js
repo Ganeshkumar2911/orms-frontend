@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 
 import apiRequest from '@/api/request'
 import urls from '@/api/urls'
@@ -18,6 +18,8 @@ export const useTransportsStore = defineStore(
     const records = ref([])
 
     const loading = ref(false)
+
+    const search = ref('')
 
     const createLoading = ref(false)
 
@@ -51,6 +53,15 @@ export const useTransportsStore = defineStore(
     })
 
     // API Methods
+
+    let searchTimeout = null
+    watch(search, () => {
+      if (searchTimeout) clearTimeout(searchTimeout)
+      searchTimeout = setTimeout(() => {
+        pagination.page = 1
+        fetchTransports(true)
+      }, 500)
+    })
 
     const fetchTransports = (force = false) => {
       if (isFetched.value && !force) return
@@ -96,6 +107,7 @@ export const useTransportsStore = defineStore(
           params: {
             page: pagination.page,
             limit: pagination.per_page,
+            search: search.value,
           },
 
           isTokenRequired: true,
@@ -250,6 +262,7 @@ export const useTransportsStore = defineStore(
       records,
 
       loading,
+      search,
       createLoading,
       updateLoading,
 

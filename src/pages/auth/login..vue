@@ -159,7 +159,7 @@ const login = () => {
           </div>
 
           <button
-            class="w-full bg-primary-blue text-white rounded-xl py-3 font-medium disabled:opacity-50"
+            class="w-full bg-primary-accent text-white rounded-xl py-3 font-medium disabled:opacity-50"
             :disabled="
               loginLoading ||
               !email ||

@@ -1,9 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Plus, Package } from 'lucide-vue-next'
+import { Plus, Package, Search } from 'lucide-vue-next'
 import { useProductsStore } from '@/stores/products/products'
 import ProductDialog from '@/components/products/ProductDialog.vue'
-import BasePagination from '@/components/common/BasePagination.vue'
 
 const store = useProductsStore()
 
@@ -30,10 +29,22 @@ onMounted(() => store.fetchProducts())
   <div class="px-4 py-4 flex flex-col gap-4">
 
     <!-- Top Bar -->
-    <div class="flex items-center justify-end">
+    <div class="flex items-center gap-3">
+      <div class="relative flex-1">
+        <Search
+          :size="16"
+          class="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-text"
+        />
+        <input
+          v-model="store.search"
+          type="text"
+          placeholder="Search products..."
+          class="input-field !pl-10 h-9"
+        />
+      </div>
       <button
         @click="openCreate"
-        class="flex items-center gap-1 bg-primary-blue text-white px-3 py-2 rounded-lg text-xs"
+        class="flex items-center gap-1 bg-primary-accent text-white px-3 py-2 rounded-lg text-xs"
       >
         <Plus :size="16" />
         New

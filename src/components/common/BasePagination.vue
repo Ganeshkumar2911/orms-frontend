@@ -13,7 +13,7 @@ const emit = defineEmits(['change'])
     <button
       @click="emit('change', pagination.currentPage - 1)"
       :disabled="pagination.currentPage === 1"
-      class="label-text text-primary-blue disabled:text-secondary-text"
+      class="label-text text-primary-accent disabled:text-secondary-text"
     >
       Prev
     </button>
@@ -23,7 +23,7 @@ const emit = defineEmits(['change'])
     <button
       @click="emit('change', pagination.currentPage + 1)"
       :disabled="pagination.currentPage === pagination.totalPages"
-      class="label-text text-primary-blue disabled:text-secondary-text"
+      class="label-text text-primary-accent disabled:text-secondary-text"
     >
       Next
     </button>

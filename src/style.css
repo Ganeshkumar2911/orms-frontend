@@ -3,20 +3,19 @@
 
 
 @theme {
-  --color-primary-blue: #3c83f6;
+  --color-primary-accent: #14b8a6;
 
   --color-background: #f8fafc;
-  --color-card-background: #fff;
+  --color-card-background: #ffffff;
   --color-primary-border: #eaeff4;
 
   --color-secondary-text: #5c6f8a;
-  --color-primary-text: #000;
+  --color-primary-text: #000000;
 
   --color-primary-green: #34d399;
   --color-primary-yellow: #fbbf24;
   --color-primary-red: #f87171;
 
-  /* Order Status Colors */
   --color-status-created: #94a3b8;
   --color-status-approved: #3c83f6;
   --color-status-executed: #fb923c;
@@ -24,33 +23,31 @@
   --color-status-completed: #34d399;
   --color-status-cancelled: #f87171;
 
-  /* Pending Quantity */
   --color-pending: #a855f7;
 }
 
 .dark {
-  --color-primary-blue: #3c83f6;
+  --color-primary-accent: #f59e0b;
 
-  --color-background: #0f1729;
-  --color-card-background: #131d34;
-  --color-primary-border: #ffffff11;
+  /* Neutral Dark Theme */
+  --color-background: #0a0a0a;
+  --color-card-background: #141414;
+  --color-primary-border: #262626;
 
-  --color-secondary-text: #7588a3;
-  --color-primary-text: #fff;
+  --color-secondary-text: #a3a3a3;
+  --color-primary-text: #ffffff;
 
   --color-primary-green: #34d399;
   --color-primary-yellow: #fbbf24;
   --color-primary-red: #f87171;
 
-  /* Order Status Colors */
   --color-status-created: #94a3b8;
-  --color-status-approved: #3c83f6;
+  --color-status-approved: #60a5fa;
   --color-status-executed: #fb923c;
   --color-status-partial: #fbbf24;
   --color-status-completed: #34d399;
   --color-status-cancelled: #f87171;
 
-  /* Pending Quantity */
   --color-pending: #a855f7;
 }
 
@@ -79,7 +76,7 @@ body{
 }
 
 .input-field {
-    @apply w-full bg-primary-border/10 border border-primary-border rounded-lg px-3 py-2 text-sm text-primary-text placeholder-secondary-text/50 focus:outline-none focus:border-primary-blue/60 focus:ring-1 focus:ring-primary-blue/20 transition-colors duration-150;
+    @apply w-full bg-primary-border/10 border border-primary-border rounded-lg px-3 py-2 text-sm text-primary-text placeholder-secondary-text/50 focus:outline-none focus:border-primary-accent/60 transition-colors duration-150;
 }
 
 .no-scrollbar::-webkit-scrollbar {

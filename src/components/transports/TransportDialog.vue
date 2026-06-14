@@ -62,7 +62,7 @@ const submit = () => {
           <button
             @click="submit"
             :disabled="store.createLoading || store.updateLoading || !form.name.trim()"
-            class="w-full py-3 rounded-xl bg-primary-blue text-primary-text mid-text disabled:opacity-50"
+            class="w-full py-3 rounded-xl bg-primary-accent text-primary-text mid-text disabled:opacity-50"
           >
             {{ store.createLoading || store.updateLoading ? 'Saving...' : store.dialog.mode === 'edit' ? 'Update' : 'Create' }}
           </button>

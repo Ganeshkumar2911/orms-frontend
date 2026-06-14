@@ -67,7 +67,7 @@ const submit = () => {
               role="switch"
               :aria-checked="form.isActive"
               @click="form.isActive = !form.isActive"
-              class="relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-blue"
+              class="relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-accent"
               :class="form.isActive ? 'bg-green-500' : 'bg-gray-300'"
             >
               <span
@@ -80,7 +80,7 @@ const submit = () => {
           <button
             @click="submit"
             :disabled="store.createLoading || store.updateLoading || !form.name.trim()"
-            class="w-full py-3 rounded-lg bg-primary-blue text-white mid-text disabled:opacity-50"
+            class="w-full py-3 rounded-lg bg-primary-accent text-white mid-text disabled:opacity-50"
           >
             <span v-if="store.createLoading || store.updateLoading">Saving...</span>
             <span v-else>{{ mode === 'edit' ? 'Update' : 'Create' }}</span>
