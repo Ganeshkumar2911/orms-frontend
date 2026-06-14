@@ -28,7 +28,7 @@ const routes = [
       {
         path: 'orders/:id',
         name: 'order-details',
-        component: () => import('@/pages/orders/orderDeatails.vue'),
+        component: () => import('@/pages/orders/orderDetails.vue'),
         meta: { title: 'Order Details' }
       },
       {

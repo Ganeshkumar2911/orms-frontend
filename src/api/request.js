@@ -3,7 +3,7 @@ import router from "../router";
 
 // ─── Constants
 
-const BASE_URL = "http://localhost:3000/api/";
+const BASE_URL = "https://5f0crrs6-3000.inc1.devtunnels.ms/api/";
 const DEFAULT_TIMEOUT = 30_000;
 const MAX_RETRY_ATTEMPTS = 2;
 const RETRYABLE_STATUS_CODES = [502, 503, 504];
