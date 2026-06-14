@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
-import { Home, ShoppingCart, Package, User } from 'lucide-vue-next'
+import { Home, ShoppingCart, Package, User, Truck } from 'lucide-vue-next'
 
 const router = useRouter()
 const route = useRoute()
@@ -9,7 +9,7 @@ const tabs = [
   { name: 'Home', icon: Home, path: '/dashboard' },
   { name: 'Orders', icon: ShoppingCart, path: '/orders' },
   { name: 'Products', icon: Package, path: '/products' },
-  { name: 'Profile', icon: User, path: '/profile' },
+  { name: 'P & T', icon: Truck, path: '/parties-transports' },
 ]
 
 const isActive = (path) => route.path.startsWith(path)

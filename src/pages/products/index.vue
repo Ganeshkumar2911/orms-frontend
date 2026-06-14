@@ -3,19 +3,25 @@ import { ref, onMounted } from 'vue'
 import { Plus, Package } from 'lucide-vue-next'
 import { useProductsStore } from '@/stores/products/products'
 import ProductDialog from '@/components/products/ProductDialog.vue'
+import BasePagination from '@/components/common/BasePagination.vue'
 
 const store = useProductsStore()
 
-const dialog = ref({ open: false, mode: 'create', item: null })
-
-const openCreate = () => { dialog.value = { open: true, mode: 'create', item: null } }
-const openEdit = (item) => { dialog.value = { open: true, mode: 'edit', item } }
-const closeDialog = () => {
-  dialog.value.open = false
-  store.fetchProducts()
+const openCreate = () => {
+  store.mode = 'create'
+  store.item = null
+  store.open = true
+}
+const openEdit = (item) => {
+  store.mode = 'edit'
+  store.item = item
+  store.open = true
 }
 
-const goToPage = (page) => store.fetchProducts({ page })
+const goToPage = (page) => {
+  store.pagination.page = page
+  store.fetchProducts(true)
+}
 
 onMounted(() => store.fetchProducts())
 </script>
@@ -24,11 +30,10 @@ onMounted(() => store.fetchProducts())
   <div class="px-4 py-4 flex flex-col gap-4">
 
     <!-- Top Bar -->
-    <div class="flex items-center justify-between">
-      <h1 class="title-text text-primary-text">Products</h1>
+    <div class="flex items-center justify-end">
       <button
         @click="openCreate"
-        class="flex items-center gap-1 bg-primary-blue text-primary-text px-3 py-2 rounded-xl label-text"
+        class="flex items-center gap-1 bg-primary-blue text-white px-3 py-2 rounded-lg text-xs"
       >
         <Plus :size="16" />
         New
@@ -58,14 +63,14 @@ onMounted(() => store.fetchProducts())
         v-for="product in store.records"
         :key="product._id"
         @click="openEdit(product)"
-        class="bg-card-background border border-primary-border rounded-2xl px-4 py-3 flex items-center justify-between active:opacity-70 transition-opacity cursor-pointer"
+        class="bg-card-background border border-primary-border rounded-lg px-4 py-3 flex items-center justify-between active:opacity-70 transition-opacity cursor-pointer"
       >
         <div class="flex flex-col gap-0.5">
           <p class="mid-text text-primary-text">{{ product.name }}</p>
         </div>
         <span
           :class="product.isActive ? 'text-primary-green' : 'text-primary-red'"
-          class="label-text px-2 py-0.5 rounded-full border"
+          class="label-text px-2 py-0.5"
           :style="product.isActive ? 'border-color: var(--color-primary-green)' : 'border-color: var(--color-primary-red)'"
         >
           {{ product.isActive ? 'Active' : 'Inactive' }}
@@ -74,36 +79,16 @@ onMounted(() => store.fetchProducts())
     </div>
 
     <!-- Pagination -->
-    <div
-      v-if="store.pagination?.total_pages > 1"
-      class="flex items-center justify-center gap-3 pt-2"
-    >
-      <button
-        @click="goToPage(store.pagination.current_page - 1)"
-        :disabled="store.pagination.current_page === 1"
-        class="label-text text-primary-blue disabled:text-secondary-text"
-      >
-        Prev
-      </button>
-      <span class="label-text text-secondary-text">
-        {{ store.pagination.current_page }} / {{ store.pagination.total_pages }}
-      </span>
-      <button
-        @click="goToPage(store.pagination.current_page + 1)"
-        :disabled="store.pagination.current_page === store.pagination.total_pages"
-        class="label-text text-primary-blue disabled:text-secondary-text"
-      >
-        Next
-      </button>
-    </div>
+    <BasePagination
+      :pagination="{ currentPage: store.pagination.page, totalPages: store.pagination.total_pages }"
+      @change="goToPage($event)"
+    />
 
   </div>
 
   <!-- Dialog -->
   <ProductDialog
-    :open="dialog.open"
-    :mode="dialog.mode"
-    :item="dialog.item"
-    @close="closeDialog"
+    :mode="store.mode"
+    :item="store.item"
   />
 </template>

@@ -6,6 +6,7 @@ const urls = {
     POST: 'post',
     PUT: 'put',
     DELETE: 'delete',
+    PATCH: 'patch',
   },
   auth: {
     login: '/auth/login',
@@ -15,6 +16,16 @@ const urls = {
     list: '/product/get',
     create: '/product/create',
     update: '/product/update',
+  },
+  transports: {
+    list: '/transport/get',
+    create: '/transport/create',
+    update: '/transport/update',
+  },
+  parties: {
+    list: '/party/get',
+    create: '/party/create',
+    update: '/party/update',
   }
 }
 

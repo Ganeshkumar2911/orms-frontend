@@ -18,13 +18,18 @@ const routes = [
   {
     path: '/',
     component: DefaultLayout,
-    children: [],
     children: [
       {
         path: 'products',
         name: 'products',
         component: ProductsView,
         meta: { title: 'Products' }
+      },
+      {
+        path: 'parties-transports',
+        name: 'parties-transports',
+        component: () => import('@/pages/parties-transports/index.vue'),
+        meta: { title: 'Parties & Transports' }
       },
     ],
   },

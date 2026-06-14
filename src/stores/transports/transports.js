@@ -6,8 +6,8 @@ import urls from '@/api/urls'
 
 import { useSnackbarStore } from '@/stores/snackbar/snackbar'
 
-export const useProductsStore = defineStore(
-  'products',
+export const useTransportsStore = defineStore(
+  'transports',
   () => {
     // Snackbar
 
@@ -27,11 +27,13 @@ export const useProductsStore = defineStore(
 
     const isFetched = ref(false)
 
-    const open = ref(false)
+    // Dialog
 
-    const mode = ref('create')
-
-    const item = ref(null)
+    const dialog = reactive({
+      open: false,
+      mode: 'create',
+      item: null,
+    })
 
     // Summary
 
@@ -50,7 +52,7 @@ export const useProductsStore = defineStore(
 
     // API Methods
 
-    const fetchProducts = (force = false) => {
+    const fetchTransports = (force = false) => {
       if (isFetched.value && !force) return
 
       loading.value = true
@@ -61,13 +63,13 @@ export const useProductsStore = defineStore(
         records.value = res?.data || []
 
         Object.assign(summary, {
-          total: res?.totalProducts || 0,
+          total: res?.totalTransports || 0,
         })
 
         Object.assign(pagination, {
           page: res?.currentPage || 1,
           per_page: pagination.per_page,
-          total_items: res?.totalProducts || 0,
+          total_items: res?.totalTransports || 0,
           total_pages: res?.totalPages || 1,
         })
 
@@ -82,14 +84,14 @@ export const useProductsStore = defineStore(
         loading.value = false
 
         snackbar.show(
-          err?.message || 'Failed to fetch products.',
+          err?.message || 'Failed to fetch transports.',
           'error'
         )
       }
 
       apiRequest(
         urls.KEYS.GET,
-        urls.products.list,
+        urls.transports.list,
         {
           params: {
             page: pagination.page,
@@ -104,22 +106,22 @@ export const useProductsStore = defineStore(
       )
     }
 
-    const createProduct = (payload) => {
+    const createTransport = (payload) => {
       createLoading.value = true
 
       const successHandler = (res) => {
         createLoading.value = false
 
+        closeDialog()
+
         snackbar.show(
-          res?.message || 'Product created successfully.',
+          res?.message || 'Transport created successfully.',
           'success'
         )
 
         isFetched.value = false
 
-        fetchProducts(true)
-
-        open.value = false
+        fetchTransports(true)
       }
 
       const failureHandler = (err) => {
@@ -128,14 +130,14 @@ export const useProductsStore = defineStore(
         createLoading.value = false
 
         snackbar.show(
-          err?.message || 'Failed to create product.',
+          err?.message || 'Failed to create transport.',
           'error'
         )
       }
 
       apiRequest(
         urls.KEYS.POST,
-        urls.products.create,
+        urls.transports.create,
         {
           data: payload,
 
@@ -147,8 +149,8 @@ export const useProductsStore = defineStore(
       )
     }
 
-    const updateProduct = (
-      productId,
+    const updateTransport = (
+      transportId,
       payload
     ) => {
       updateLoading.value = true
@@ -156,16 +158,16 @@ export const useProductsStore = defineStore(
       const successHandler = (res) => {
         updateLoading.value = false
 
+        closeDialog()
+
         snackbar.show(
-          res?.message || 'Product updated successfully.',
+          res?.message || 'Transport updated successfully.',
           'success'
         )
 
         isFetched.value = false
 
-        fetchProducts(true)
-
-        open.value = false
+        fetchTransports(true)
       }
 
       const failureHandler = (err) => {
@@ -174,16 +176,16 @@ export const useProductsStore = defineStore(
         updateLoading.value = false
 
         snackbar.show(
-          err?.message || 'Failed to update product.',
+          err?.message || 'Failed to update transport.',
           'error'
         )
       }
 
       apiRequest(
         urls.KEYS.PATCH,
-        urls.products.update,
+        urls.transports.update,
         {
-          look_up_key: productId,
+          look_up_key: transportId,
 
           data: payload,
 
@@ -193,6 +195,26 @@ export const useProductsStore = defineStore(
           onFailure: failureHandler,
         }
       )
+    }
+
+    // Dialog Methods
+
+    const openCreateDialog = () => {
+      dialog.open = true
+      dialog.mode = 'create'
+      dialog.item = null
+    }
+
+    const openEditDialog = (item) => {
+      dialog.open = true
+      dialog.mode = 'edit'
+      dialog.item = item
+    }
+
+    const closeDialog = () => {
+      dialog.open = false
+      dialog.mode = 'create'
+      dialog.item = null
     }
 
     // Reset
@@ -201,14 +223,14 @@ export const useProductsStore = defineStore(
       records.value = []
 
       loading.value = false
-
       createLoading.value = false
-
       updateLoading.value = false
 
       error.value = null
 
       isFetched.value = false
+
+      closeDialog()
 
       Object.assign(summary, {
         total: 0,
@@ -226,19 +248,31 @@ export const useProductsStore = defineStore(
 
     return {
       records,
+
       loading,
       createLoading,
       updateLoading,
+
       error,
+
       isFetched,
-      open,
-      mode,
-      item,
+
+      dialog,
+
       summary,
+
       pagination,
-      fetchProducts,
-      createProduct,
-      updateProduct,
+
+      fetchTransports,
+
+      createTransport,
+
+      updateTransport,
+
+      openCreateDialog,
+      openEditDialog,
+      closeDialog,
+
       reset,
     }
   }
