@@ -1,11 +1,17 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { ShoppingCart } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+import { ShoppingCart, Search, Plus } from 'lucide-vue-next'
 import { useOrdersStore } from '@/stores/orders/orders'
 
 import CreateOrderDialog from '@/components/orders/CreateOrderDialog.vue'
 
 const store = useOrdersStore()
+const router = useRouter()
+
+const openOrder = (id) => {
+  router.push({ name: 'order-details', params: { id } })
+}
 
 const statusOptions = [
   { label: 'Created', value: 'CREATED' },
@@ -17,17 +23,32 @@ const statusOptions = [
 ]
 
 const statusClass = {
-  CREATED: 'text-status-created',
-  APPROVED: 'text-status-approved',
-  EXECUTED: 'text-status-executed',
-  PARTIAL: 'text-status-partial',
-  COMPLETED: 'text-status-completed',
-  CANCELLED: 'text-status-cancelled',
+  CREATED: 'text-status-created border-status-created/30 bg-status-created/5',
+  APPROVED: 'text-status-approved border-status-approved/30 bg-status-approved/5',
+  EXECUTED: 'text-status-executed border-status-executed/30 bg-status-executed/5',
+  PARTIAL: 'text-status-partial border-status-partial/30 bg-status-partial/5',
+  COMPLETED: 'text-status-completed border-status-completed/30 bg-status-completed/5',
+  CANCELLED: 'text-status-cancelled border-status-cancelled/30 bg-status-cancelled/5',
+}
+
+const cardStatusClass = {
+  CREATED: 'border-status-created/20 shadow-sm shadow-status-created/5',
+  APPROVED: 'border-status-approved/20 shadow-sm shadow-status-approved/5',
+  EXECUTED: 'border-status-executed/20 shadow-sm shadow-status-executed/5',
+  PARTIAL: 'border-status-partial/20 shadow-sm shadow-status-partial/5',
+  COMPLETED: 'border-status-completed/20 shadow-sm shadow-status-completed/5',
+  CANCELLED: 'border-status-cancelled/20 shadow-sm shadow-status-cancelled/5',
 }
 
 const formatDate = (d) => new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
 
-const onFilterChange = () => store.applyFilters()
+let filterTimeout = null
+const onFilterChange = () => {
+  if (filterTimeout) clearTimeout(filterTimeout)
+  filterTimeout = setTimeout(() => {
+    store.applyFilters()
+  }, 500)
+}
 
 onMounted(() => store.fetchOrders())
 </script>
@@ -36,48 +57,55 @@ onMounted(() => store.fetchOrders())
   <div class="px-4 py-4 flex flex-col gap-4">
 
     <!-- Top Bar -->
-    <div class="flex items-center justify-between">
-      <h1 class="title-text text-primary-text">Orders</h1>
+    <div class="flex items-center gap-3">
+      <div class="relative flex-1">
+        <Search
+          :size="16"
+          class="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-text"
+        />
+        <input
+          v-model="store.filters.search"
+          type="text"
+          placeholder="Search order number..."
+          class="input-field !pl-10 h-10 w-full"
+          @input="onFilterChange"
+        />
+      </div>
       <button
         @click="store.openCreateDialog()"
-        class="bg-primary-accent text-primary-text px-3 py-2 rounded-xl label-text"
+        class="flex items-center gap-1 bg-primary-accent text-white px-3 py-2 rounded-lg text-xs shrink-0 h-10"
       >
-        + New
+        <Plus :size="16" />
+        New
       </button>
     </div>
 
     <!-- Filters -->
     <div class="flex flex-col gap-3">
+      <div class="flex gap-2">
+        <!-- Status -->
+        <BaseSelect
+          v-model="store.filters.status"
+          :options="statusOptions"
+          placeholder="All Statuses"
+          class="flex-1"
+          :allow-all="true"
+          @update:modelValue="onFilterChange"
+        />
 
-      <!-- Search -->
-      <input
-        v-model="store.filters.search"
-        type="text"
-        placeholder="Search order number..."
-        class="input-field w-full"
-        @input="onFilterChange"
-      />
-
-      <!-- Status -->
-      <BaseSelect
-        v-model="store.filters.status"
-        :options="statusOptions"
-        placeholder="All Statuses"
-        :allow-all="true"
-        @update:modelValue="onFilterChange"
-      />
-
-      <!-- Party -->
-      <BaseSelect
-        v-model="store.filters.partyId"
-        :options="store.partyOptions"
-        :is-loading="store.partyOptionsLoading"
-        placeholder="All Parties"
-        :searchable="true"
-        :allow-all="true"
-        @search="store.fetchPartyOptions($event)"
-        @update:modelValue="onFilterChange"
-      />
+        <!-- Party -->
+        <BaseSelect
+          v-model="store.filters.partyId"
+          :options="store.partyOptions"
+          :is-loading="store.partyOptionsLoading"
+          placeholder="All Parties"
+          class="flex-1"
+          :searchable="true"
+          :allow-all="true"
+          @search="store.fetchPartyOptions($event)"
+          @update:modelValue="onFilterChange"
+        />
+      </div>
 
       <!-- Date Range -->
       <div class="flex gap-2">
@@ -118,14 +146,16 @@ onMounted(() => store.fetchOrders())
       <div
         v-for="order in store.records"
         :key="order._id"
-        class="bg-card-background border border-primary-border rounded-2xl px-4 py-3 flex flex-col gap-2"
+        @click="openOrder(order._id)"
+        class="bg-card-background border rounded-lg px-4 py-3 flex flex-col gap-2 transition-all duration-200 cursor-pointer"
+        :class="cardStatusClass[order.status] || 'border-primary-border'"
       >
         <!-- Row 1: Order Number + Status -->
         <div class="flex items-center justify-between">
           <span class="mid-text text-primary-text">{{ order.orderNumber }}</span>
           <span
-            class="label-text px-2 py-0.5 rounded-full border"
-            :class="statusClass[order.status] || 'text-secondary-text'"
+            class="label-text px-2 py-0.5 rounded-lg border"
+            :class="statusClass[order.status] || 'text-secondary-text border-primary-border'"
           >
             {{ order.status }}
           </span>

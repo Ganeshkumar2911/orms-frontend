@@ -6,6 +6,14 @@ import urls from '@/api/urls'
 
 import { useSnackbarStore } from '@/stores/snackbar/snackbar'
 
+const createDebounce = (fn, delay) => {
+  let timeoutId
+  return (...args) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => fn(...args), delay)
+  }
+}
+
 export const useOrdersStore = defineStore(
   'orders',
   () => {
@@ -26,6 +34,10 @@ export const useOrdersStore = defineStore(
     const transportOptionsLoading = ref(false)
 
     const productOptionsLoading = ref(false)
+
+    const partyOptions = ref([])
+    const transportOptions = ref([])
+    const productOptions = ref([])
 
     const error = ref(null)
 
@@ -162,142 +174,135 @@ export const useOrdersStore = defineStore(
 
     // Search Dropdown Methods
 
-    const fetchPartyOptions = (
+    const _fetchPartyOptions = (
       searchQuery = ''
     ) => {
       partyOptionsLoading.value = true
 
-      return new Promise((resolve) => {
-        const successHandler = (res) => {
-          partyOptionsLoading.value = false
+      const successHandler = (res) => {
+        partyOptionsLoading.value = false
 
-          resolve(
-            (res?.data || []).map((item) => ({
-              label: item.name,
-              value: item._id,
-              isActive: item.isActive,
-            }))
-          )
+        partyOptions.value = (res?.data || []).map((item) => ({
+          label: item.name,
+          value: item._id,
+          isActive: item.isActive,
+        }))
+      }
+
+      const failureHandler = () => {
+        partyOptionsLoading.value = false
+        partyOptions.value = []
+      }
+
+      apiRequest(
+        urls.KEYS.GET,
+        urls.parties.list,
+        {
+          params: {
+            search: searchQuery,
+            page: 1,
+            limit: 20,
+          },
+
+          isTokenRequired: true,
+
+          onSuccess: successHandler,
+          onFailure: failureHandler,
         }
-
-        const failureHandler = () => {
-          partyOptionsLoading.value = false
-
-          resolve([])
-        }
-
-        apiRequest(
-          urls.KEYS.GET,
-          urls.parties.list,
-          {
-            params: {
-              search: searchQuery,
-              page: 1,
-              limit: 20,
-            },
-
-            isTokenRequired: true,
-
-            onSuccess: successHandler,
-            onFailure: failureHandler,
-          }
-        )
-      })
+      )
     }
 
-    const fetchTransportOptions = (
+    const fetchPartyOptions = createDebounce(_fetchPartyOptions, 500)
+
+    const _fetchTransportOptions = (
       searchQuery = ''
     ) => {
       transportOptionsLoading.value = true
 
-      return new Promise((resolve) => {
-        const successHandler = (res) => {
-          transportOptionsLoading.value = false
+      const successHandler = (res) => {
+        transportOptionsLoading.value = false
 
-          resolve(
-            (res?.data || []).map((item) => ({
-              label: item.name,
-              value: item._id,
-              isActive: item.isActive,
-            }))
-          )
+        transportOptions.value = (res?.data || []).map((item) => ({
+          label: item.name,
+          value: item._id,
+          isActive: item.isActive,
+        }))
+      }
+
+      const failureHandler = () => {
+        transportOptionsLoading.value = false
+        transportOptions.value = []
+      }
+
+      apiRequest(
+        urls.KEYS.GET,
+        urls.transports.list,
+        {
+          params: {
+            search: searchQuery,
+            page: 1,
+            limit: 20,
+          },
+
+          isTokenRequired: true,
+
+          onSuccess: successHandler,
+          onFailure: failureHandler,
         }
-
-        const failureHandler = () => {
-          transportOptionsLoading.value = false
-
-          resolve([])
-        }
-
-        apiRequest(
-          urls.KEYS.GET,
-          urls.transports.list,
-          {
-            params: {
-              search: searchQuery,
-              page: 1,
-              limit: 20,
-            },
-
-            isTokenRequired: true,
-
-            onSuccess: successHandler,
-            onFailure: failureHandler,
-          }
-        )
-      })
+      )
     }
 
-    const fetchProductOptions = (
+    const fetchTransportOptions = createDebounce(_fetchTransportOptions, 500)
+
+    const _fetchProductOptions = (
       searchQuery = ''
     ) => {
       productOptionsLoading.value = true
 
-      return new Promise((resolve) => {
-        const successHandler = (res) => {
-          productOptionsLoading.value = false
+      const successHandler = (res) => {
+        productOptionsLoading.value = false
 
-          resolve(
-            (res?.data || []).map((item) => ({
-              label: item.name,
-              value: item._id,
-              isActive: item.isActive,
-            }))
-          )
+        productOptions.value = (res?.data || []).map((item) => ({
+          label: item.name,
+          value: item._id,
+          isActive: item.isActive,
+        }))
+      }
+
+      const failureHandler = () => {
+        productOptionsLoading.value = false
+        productOptions.value = []
+      }
+
+      apiRequest(
+        urls.KEYS.GET,
+        urls.products.list,
+        {
+          params: {
+            search: searchQuery,
+            page: 1,
+            limit: 20,
+          },
+
+          isTokenRequired: true,
+
+          onSuccess: successHandler,
+          onFailure: failureHandler,
         }
-
-        const failureHandler = () => {
-          productOptionsLoading.value = false
-
-          resolve([])
-        }
-
-        apiRequest(
-          urls.KEYS.GET,
-          urls.products.list,
-          {
-            params: {
-              search: searchQuery,
-              page: 1,
-              limit: 20,
-            },
-
-            isTokenRequired: true,
-
-            onSuccess: successHandler,
-            onFailure: failureHandler,
-          }
-        )
-      })
+      )
     }
+
+    const fetchProductOptions = createDebounce(_fetchProductOptions, 500)
 
     // Filter Methods
 
-    const applyFilters = () => {
+    const _applyFilters = () => {
       pagination.page = 1
 
       fetchOrders()
     }
+
+    const applyFilters = createDebounce(_applyFilters, 500)
 
     // Dialog Methods
 
@@ -369,6 +374,10 @@ export const useOrdersStore = defineStore(
       partyOptionsLoading,
       transportOptionsLoading,
       productOptionsLoading,
+
+      partyOptions,
+      transportOptions,
+      productOptions,
 
       error,
 

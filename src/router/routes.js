@@ -26,6 +26,12 @@ const routes = [
         meta: { title: 'Orders' }
       },
       {
+        path: 'orders/:id',
+        name: 'order-details',
+        component: () => import('@/pages/orders/orderDeatails.vue'),
+        meta: { title: 'Order Details' }
+      },
+      {
         path: 'products',
         name: 'products',
         component: ProductsView,

@@ -30,6 +30,12 @@ const urls = {
   orders: {
     list: '/order/get',
     create: '/order/create',
+
+    details: '/order/get',
+    approve: '/order/approve',
+    execute: '/order/execute',
+    dispatch: '/order/dispatch',
+    cancel: '/order/cancel',
     update: '/order/update',
   }
 }
