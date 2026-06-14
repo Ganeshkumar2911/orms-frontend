@@ -6,13 +6,17 @@ import BaseSelect from '@/components/common/BaseSelect.vue'
 
 const store = useOrdersStore()
 
-const form = ref({ party: null, transport: null, items: [] })
+const form = ref({ party: null, transport: null, items: [{ product: null, orderedQty: '', price: '' }] })
 const errors = ref({})
 
 watch(() => store.dialog.open, (val) => {
   if (val) {
-    form.value = { party: null, transport: null, items: [] }
+    form.value = { party: null, transport: null, items: [{ product: null, orderedQty: '', price: '' }] }
     errors.value = {}
+    // Pre-fetch data for select dropdowns to avoid empty lists initially
+    store.fetchPartyOptions()
+    store.fetchTransportOptions()
+    store.fetchProductOptions()
   }
 })
 
@@ -55,79 +59,96 @@ const submit = () => {
 
 <template>
   <Teleport to="body">
-    <div v-if="store.dialog.open" class="fixed inset-0 z-50 flex flex-col justify-end">
-      <div class="absolute inset-0 bg-black/50" @click="store.closeDialog()" />
+    <div v-if="store.dialog.open" class="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center sm:items-center p-0 sm:p-4">
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity" @click="store.closeDialog()" />
 
-      <div class="relative bg-card-background border-t border-primary-border rounded-t-2xl z-10 flex flex-col max-h-[90vh]">
+      <div class="relative bg-card-background border-t sm:border border-primary-border rounded-t-2xl sm:rounded-2xl z-10 flex flex-col w-full sm:max-w-2xl max-h-[90vh] sm:max-h-[85vh] shadow-2xl transition-all duration-300">
 
         <!-- Header -->
         <div class="flex items-center justify-between px-5 pt-5 pb-3 border-b border-primary-border">
-          <h2 class="title-text text-primary-text">Create Order</h2>
-          <button @click="store.closeDialog()">
-            <X :size="20" class="text-secondary-text" />
+          <h2 class="title-text text-primary-text font-bold">Create Order</h2>
+          <button @click="store.closeDialog()" class="cursor-pointer">
+            <X :size="20" class="text-secondary-text hover:text-primary-text transition-colors" />
           </button>
         </div>
 
         <!-- Scrollable Body -->
         <div class="overflow-y-auto px-5 py-4 flex flex-col gap-5">
 
-          <!-- Party -->
-          <div>
-            <label class="label-text text-secondary-text block mb-1">Party <span class="text-primary-red">*</span></label>
-            <BaseSelect
-              v-model="form.party"
-              :options="store.partyOptions"
-              :is-loading="store.partyOptionsLoading"
-              placeholder="Search party..."
-              :searchable="true"
-              @search="store.fetchPartyOptions($event)"
-            />
-            <p v-if="errors.party" class="label-text text-primary-red mt-1">Required</p>
-          </div>
+          <!-- Party & Transport (Responsive Grid) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Party -->
+            <div>
+              <label class="label-text text-secondary-text block mb-1.5 font-semibold">Party <span class="text-primary-red">*</span></label>
+              <BaseSelect
+                v-model="form.party"
+                :options="store.partyOptions"
+                :is-loading="store.partyOptionsLoading"
+                placeholder="Search party..."
+                :searchable="true"
+                @search="store.fetchPartyOptions($event)"
+              />
+              <p v-if="errors.party" class="label-text text-primary-red mt-1 font-semibold">Required</p>
+            </div>
 
-          <!-- Transport -->
-          <div>
-            <label class="label-text text-secondary-text block mb-1">Transport <span class="text-primary-red">*</span></label>
-            <BaseSelect
-              v-model="form.transport"
-              :options="store.transportOptions"
-              :is-loading="store.transportOptionsLoading"
-              placeholder="Search transport..."
-              :searchable="true"
-              @search="store.fetchTransportOptions($event)"
-            />
-            <p v-if="errors.transport" class="label-text text-primary-red mt-1">Required</p>
+            <!-- Transport -->
+            <div>
+              <label class="label-text text-secondary-text block mb-1.5 font-semibold">Transport <span class="text-primary-red">*</span></label>
+              <BaseSelect
+                v-model="form.transport"
+                :options="store.transportOptions"
+                :is-loading="store.transportOptionsLoading"
+                placeholder="Search transport..."
+                :searchable="true"
+                @search="store.fetchTransportOptions($event)"
+              />
+              <p v-if="errors.transport" class="label-text text-primary-red mt-1 font-semibold">Required</p>
+            </div>
           </div>
 
           <!-- Items -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <span class="mid-text text-primary-text">Items</span>
+          <div class="border-t border-primary-border/60 pt-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span class="mid-text text-primary-text font-bold">Order Items</span>
+                <span class="bg-primary-accent/10 text-primary-accent text-[11px] px-2 py-0.5 rounded-full font-bold">
+                  {{ form.items.length }}
+                </span>
+              </div>
               <button
+                type="button"
                 @click="addItem"
-                class="flex items-center gap-1 label-text text-primary-accent"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary-accent/30 text-[12px] font-semibold text-primary-accent hover:bg-primary-accent/5 transition-all duration-150 cursor-pointer"
               >
                 <Plus :size="14" /> Add Item
               </button>
             </div>
 
-            <p v-if="errors.items" class="label-text text-primary-red mb-2">{{ errors.items }}</p>
+            <p v-if="errors.items" class="label-text text-primary-red mb-3 font-semibold">{{ errors.items }}</p>
 
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-4">
               <div
                 v-for="(item, i) in form.items"
                 :key="i"
-                class="bg-card-background border border-primary-border rounded-2xl p-3 flex flex-col gap-3"
+                class="bg-background/40 border border-primary-border rounded-xl p-4 flex flex-col gap-4 relative hover:border-primary-accent/20 transition-all duration-200"
               >
-                <div class="flex items-center justify-between">
-                  <span class="label-text text-secondary-text">Item {{ i + 1 }}</span>
-                  <button @click="removeItem(i)">
-                    <Trash2 :size="15" class="text-primary-red" />
+                <!-- Card Header -->
+                <div class="flex items-center justify-between pb-2 border-b border-primary-border/65">
+                  <span class="label-text text-secondary-text font-bold text-[11px] uppercase tracking-wider">Item #{{ i + 1 }}</span>
+                  <button
+                    v-if="form.items.length > 1"
+                    type="button"
+                    @click="removeItem(i)"
+                    class="text-primary-red hover:bg-primary-red/5 p-1 rounded-lg transition-colors duration-150 cursor-pointer"
+                    title="Remove item"
+                  >
+                    <Trash2 :size="16" />
                   </button>
                 </div>
 
+                <!-- Product -->
                 <div>
-                  <label class="label-text text-secondary-text block mb-1">Product <span class="text-primary-red">*</span></label>
+                  <label class="label-text text-secondary-text block mb-1.5 font-semibold">Product <span class="text-primary-red">*</span></label>
                   <BaseSelect
                     v-model="item.product"
                     :options="store.productOptions"
@@ -137,31 +158,33 @@ const submit = () => {
                     variant="surface"
                     @search="store.fetchProductOptions($event)"
                   />
-                  <p v-if="errors[`product_${i}`]" class="label-text text-primary-red mt-1">Required</p>
+                  <p v-if="errors[`product_${i}`]" class="label-text text-primary-red mt-1 font-semibold">Required</p>
                 </div>
 
-                <div class="flex gap-2">
-                  <div class="flex-1">
-                    <label class="label-text text-secondary-text block mb-1">Qty <span class="text-primary-red">*</span></label>
+                <!-- Qty & Price -->
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="label-text text-secondary-text block mb-1.5 font-semibold">Quantity <span class="text-primary-red">*</span></label>
                     <input
                       v-model="item.orderedQty"
                       type="number"
                       min="1"
                       placeholder="0"
-                      class="input-field w-full"
+                      class="input-field w-full bg-background"
                     />
-                    <p v-if="errors[`qty_${i}`]" class="label-text text-primary-red mt-1">Required</p>
+                    <p v-if="errors[`qty_${i}`]" class="label-text text-primary-red mt-1 font-semibold">Required</p>
                   </div>
-                  <div class="flex-1">
-                    <label class="label-text text-secondary-text block mb-1">Price <span class="text-primary-red">*</span></label>
+                  <div>
+                    <label class="label-text text-secondary-text block mb-1.5 font-semibold">Price <span class="text-primary-red">*</span></label>
                     <input
                       v-model="item.price"
                       type="number"
                       min="1"
+                      step="0.01"
                       placeholder="0.00"
-                      class="input-field w-full"
+                      class="input-field w-full bg-background"
                     />
-                    <p v-if="errors[`price_${i}`]" class="label-text text-primary-red mt-1">Required</p>
+                    <p v-if="errors[`price_${i}`]" class="label-text text-primary-red mt-1 font-semibold">Required</p>
                   </div>
                 </div>
               </div>
@@ -170,11 +193,11 @@ const submit = () => {
         </div>
 
         <!-- Footer -->
-        <div class="px-5 py-4 border-t border-primary-border">
+        <div class="px-5 py-4 border-t border-primary-border bg-card-background rounded-b-2xl">
           <button
             @click="submit"
             :disabled="store.createLoading"
-            class="w-full py-3 rounded-xl bg-primary-accent text-primary-text mid-text disabled:opacity-50"
+            class="w-full py-3 rounded-xl bg-primary-accent text-primary-text font-bold mid-text disabled:opacity-50 transition-all cursor-pointer"
           >
             {{ store.createLoading ? 'Creating...' : 'Create Order' }}
           </button>

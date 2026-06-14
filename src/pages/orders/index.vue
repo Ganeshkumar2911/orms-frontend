@@ -27,17 +27,29 @@ const statusClass = {
   APPROVED: 'text-status-approved border-status-approved/30 bg-status-approved/5',
   EXECUTED: 'text-status-executed border-status-executed/30 bg-status-executed/5',
   PARTIAL: 'text-status-partial border-status-partial/30 bg-status-partial/5',
+  PARTIALLY_DISPATCHED: 'text-status-partial border-status-partial/30 bg-status-partial/5',
   COMPLETED: 'text-status-completed border-status-completed/30 bg-status-completed/5',
   CANCELLED: 'text-status-cancelled border-status-cancelled/30 bg-status-cancelled/5',
 }
 
 const cardStatusClass = {
-  CREATED: 'border-status-created/20 shadow-sm shadow-status-created/5',
-  APPROVED: 'border-status-approved/20 shadow-sm shadow-status-approved/5',
-  EXECUTED: 'border-status-executed/20 shadow-sm shadow-status-executed/5',
-  PARTIAL: 'border-status-partial/20 shadow-sm shadow-status-partial/5',
-  COMPLETED: 'border-status-completed/20 shadow-sm shadow-status-completed/5',
-  CANCELLED: 'border-status-cancelled/20 shadow-sm shadow-status-cancelled/5',
+  CREATED: 'border-l-status-created',
+  APPROVED: 'border-l-status-approved',
+  EXECUTED: 'border-l-status-executed',
+  PARTIAL: 'border-l-status-partial',
+  PARTIALLY_DISPATCHED: 'border-l-status-partial',
+  COMPLETED: 'border-l-status-completed',
+  CANCELLED: 'border-l-status-cancelled',
+}
+
+const statusLabels = {
+  CREATED: 'Created',
+  APPROVED: 'Approved',
+  EXECUTED: 'Executed',
+  PARTIAL: 'Partial',
+  PARTIALLY_DISPATCHED: 'Partial',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
 }
 
 const formatDate = (d) => new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -147,24 +159,24 @@ onMounted(() => store.fetchOrders())
         v-for="order in store.records"
         :key="order._id"
         @click="openOrder(order._id)"
-        class="bg-card-background border rounded-lg px-4 py-3 flex flex-col gap-2 transition-all duration-200 cursor-pointer"
-        :class="cardStatusClass[order.status] || 'border-primary-border'"
+        class="bg-card-background border-y border-r border-l-4 border-y-primary-border border-r-primary-border rounded-r-lg rounded-l-[3px] px-4 py-3 flex flex-col gap-2 transition-all duration-200 cursor-pointer hover:shadow-sm hover:border-y-primary-accent/30 hover:border-r-primary-accent/30"
+        :class="cardStatusClass[order.status] || 'border-l-secondary-text'"
       >
         <!-- Row 1: Order Number + Status -->
         <div class="flex items-center justify-between">
-          <span class="mid-text text-primary-text">{{ order.orderNumber }}</span>
+          <span class="mid-text text-primary-text font-medium">{{ order.orderNumber }}</span>
           <span
-            class="label-text px-2 py-0.5 rounded-lg border"
+            class="label-text px-2 py-0.5 rounded-lg border font-semibold"
             :class="statusClass[order.status] || 'text-secondary-text border-primary-border'"
           >
-            {{ order.status }}
+            {{ statusLabels[order.status] || order.status }}
           </span>
         </div>
 
         <!-- Row 2: Party & Transport -->
         <div class="flex flex-col gap-0.5">
-          <p class="label-text text-secondary-text">Party: <span class="text-primary-text">{{ order.party?.name }}</span></p>
-          <p class="label-text text-secondary-text">Transport: <span class="text-primary-text">{{ order.transport?.name }}</span></p>
+          <p class="label-text text-secondary-text">Party: <span class="text-primary-text font-medium">{{ order.party?.name }}</span></p>
+          <p class="label-text text-secondary-text">Transport: <span class="text-primary-text font-medium">{{ order.transport?.name }}</span></p>
         </div>
 
         <!-- Row 3: Date -->
