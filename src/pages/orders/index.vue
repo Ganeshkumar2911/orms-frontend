@@ -17,7 +17,7 @@ const statusOptions = [
   { label: 'Created', value: 'CREATED' },
   { label: 'Approved', value: 'APPROVED' },
   { label: 'Executed', value: 'EXECUTED' },
-  { label: 'Partial', value: 'PARTIAL' },
+  { label: 'Partial Dispatch', value: 'PARTIALLY_DISPATCHED' },
   { label: 'Completed', value: 'COMPLETED' },
   { label: 'Cancelled', value: 'CANCELLED' },
 ]
