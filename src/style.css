@@ -87,3 +87,9 @@ body{
   -ms-overflow-style: none;  /* IE & old Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
+/* Dark mode calendar icon color alignment */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+  cursor: pointer;
+}

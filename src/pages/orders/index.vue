@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ShoppingCart, Search, Plus } from 'lucide-vue-next'
+import { ShoppingCart, Search, Plus, X } from 'lucide-vue-next'
 import { useOrdersStore } from '@/stores/orders/orders'
 
 import CreateOrderDialog from '@/components/orders/CreateOrderDialog.vue'
@@ -55,11 +55,36 @@ const statusLabels = {
 const formatDate = (d) => new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
 
 let filterTimeout = null
-const onFilterChange = () => {
+const onFilterChange = (isDate = false) => {
+  if (isDate) {
+    const from = store.filters.fromDate
+    const to = store.filters.toDate
+    // Only call API if both are selected or both are empty
+    if ((from && !to) || (!from && to)) return
+  }
   if (filterTimeout) clearTimeout(filterTimeout)
   filterTimeout = setTimeout(() => {
     store.applyFilters()
   }, 500)
+}
+
+const hasFilters = computed(() => {
+  return !!(
+    store.filters.search ||
+    store.filters.status ||
+    store.filters.partyId ||
+    store.filters.fromDate ||
+    store.filters.toDate
+  )
+})
+
+const clearAllFilters = () => {
+  store.filters.search = ''
+  store.filters.status = ''
+  store.filters.partyId = ''
+  store.filters.fromDate = ''
+  store.filters.toDate = ''
+  store.applyFilters()
 }
 
 onMounted(() => store.fetchOrders())
@@ -119,26 +144,36 @@ onMounted(() => store.fetchOrders())
         />
       </div>
 
-      <!-- Date Range -->
-      <div class="flex gap-2">
-        <div class="flex-1">
+      <!-- Date Range & Clear Filters -->
+      <div class="flex gap-2 items-end">
+        <div class="flex-1 min-w-0">
           <label class="label-text text-secondary-text block mb-1">From</label>
           <input
             v-model="store.filters.fromDate"
             type="date"
-            class="input-field w-full"
-            @change="onFilterChange"
+            class="input-field w-full text-xs sm:text-sm px-2 sm:px-3 h-10"
+            @change="onFilterChange(true)"
           />
         </div>
-        <div class="flex-1">
+        <div class="flex-1 min-w-0">
           <label class="label-text text-secondary-text block mb-1">To</label>
           <input
             v-model="store.filters.toDate"
             type="date"
-            class="input-field w-full"
-            @change="onFilterChange"
+            class="input-field w-full text-xs sm:text-sm px-2 sm:px-3 h-10"
+            @change="onFilterChange(true)"
           />
         </div>
+        <!-- Clear Filters (inline) -->
+        <button
+          v-if="hasFilters"
+          @click="clearAllFilters"
+          class="h-10 px-2.5 rounded-lg border border-primary-red/25 text-primary-red hover:bg-primary-red/5 font-semibold text-xs shrink-0 flex items-center gap-1 transition-all duration-150 cursor-pointer"
+          title="Clear all filters"
+        >
+          <X :size="14" />
+          Clear
+        </button>
       </div>
     </div>
 
