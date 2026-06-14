@@ -11,6 +11,7 @@ const urls = {
   auth: {
     login: '/auth/login',
     me: '/auth/me',
+    logout: '/auth/logout',
   },
   products: {
     list: '/product/get',

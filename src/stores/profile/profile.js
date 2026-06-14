@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import apiRequest from '@/api/request'
 import urls from '@/api/urls'
+import authToken from '@/common/authToken'
 
 export const useUserStore = defineStore(
   'user',
@@ -52,6 +53,29 @@ export const useUserStore = defineStore(
       )
     }
 
+    const logout = (onSuccess, onFailure) => {
+      loading.value = true
+      apiRequest(
+        urls.KEYS.POST,
+        urls.auth.logout,
+        {
+          onSuccess: (res) => {
+            authToken.removeToken()
+            reset()
+            loading.value = false
+            if (onSuccess) onSuccess(res)
+          },
+          onFailure: (err) => {
+            // Clear token and reset state anyway to prevent user being stuck
+            authToken.removeToken()
+            reset()
+            loading.value = false
+            if (onFailure) onFailure(err)
+          }
+        }
+      )
+    }
+
     // Reset
 
     const reset = () => {
@@ -76,6 +100,8 @@ export const useUserStore = defineStore(
       isFetched,
 
       fetchProfile,
+
+      logout,
 
       reset,
     }
