@@ -21,16 +21,29 @@ const isActive = (path) => route.path.startsWith(path)
       v-for="tab in tabs"
       :key="tab.name"
       @click="router.push(tab.path)"
-      class="flex flex-col items-center justify-center flex-1 h-full gap-1"
+      class="flex flex-col items-center justify-center flex-1 h-full gap-0.5 relative"
     >
-      <component
-        :is="tab.icon"
-        :size="22"
-        :class="isActive(tab.path) ? 'text-primary-accent' : 'text-secondary-text'"
-      />
+      <!-- Active indicator pill at top -->
       <span
-        class="label-text"
-        :class="isActive(tab.path) ? 'text-primary-accent' : 'text-secondary-text'"
+        class="absolute top-0 h-0.5 w-8 rounded-full transition-all duration-300"
+        :class="isActive(tab.path) ? 'bg-primary-accent' : 'bg-transparent'"
+      />
+
+      <!-- Icon with background pill when active -->
+      <div
+        class="px-4 py-1 rounded-lg transition-all duration-200"
+      >
+        <component
+          :is="tab.icon"
+          :size="20"
+          :class="isActive(tab.path) ? 'text-primary-accent' : 'text-secondary-text'"
+        />
+      </div>
+
+      <!-- Label -->
+      <span
+        class="text-[10px] transition-all duration-200"
+        :class="isActive(tab.path) ? 'text-primary-accent font-bold' : 'text-secondary-text font-medium'"
       >
         {{ tab.name }}
       </span>

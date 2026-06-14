@@ -20,6 +20,16 @@ const routes = [
     component: DefaultLayout,
     children: [
       {
+        path: '',
+        redirect: { name: 'dashboard' }
+      },
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () => import('@/pages/home/index.vue'),
+        meta: { title: 'Dashboard' }
+      },
+      {
         path: 'orders',
         name: 'orders',
         component: () => import('@/pages/orders/index.vue'),
@@ -29,7 +39,7 @@ const routes = [
         path: 'orders/:id',
         name: 'order-details',
         component: () => import('@/pages/orders/orderDetails.vue'),
-        meta: { title: 'Order Details' }
+        meta: { title: 'Order Details', showBackButton: true }
       },
       {
         path: 'products',

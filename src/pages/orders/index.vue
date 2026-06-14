@@ -219,7 +219,7 @@ onMounted(() => store.fetchOrders())
       </div>
     </div>
 
-    <BasePagination :pagination="store.pagination" @change="store.fetchOrders({ page: $event })" />
+    <BasePagination :pagination="{ currentPage: store.pagination.page, totalPages: store.pagination.total_pages }" @change="store.changePage($event)" />
 
   </div>
 

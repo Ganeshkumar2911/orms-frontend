@@ -37,6 +37,9 @@ const urls = {
     dispatch: '/order/dispatch',
     cancel: '/order/cancel',
     update: '/order/update',
+  },
+  dashboard: {
+    summary: "/dashboard"
   }
 }
 
