@@ -9,9 +9,9 @@ import {
 import { useOrderDetailsStore } from '@/stores/orders/orderDetails'
 import { useUserStore } from '@/stores/profile/profile'
 
-import CancelOrderDialog from '@/components/orderDetails/CancelOrderDialog.vue'
-import DispatchOrderDialog from '@/components/orderDetails/DispatchOrderDialog.vue'
-import EditOrderDialog from '@/components/orderDetails/EditOrderDialog.vue'
+import CancelOrderDialog from '@/components/orderDetails/Cancelorderdialog.vue'
+import DispatchOrderDialog from '@/components/orderDetails/Dispatchorderdialog.vue'
+import EditOrderDialog from '@/components/orderDetails/Editorderdialog.vue'
 
 const route = useRoute()
 const store = useOrderDetailsStore()
