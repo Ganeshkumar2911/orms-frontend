@@ -30,6 +30,12 @@ const routes = [
         meta: { title: 'Dashboard' }
       },
       {
+        path: '/dashboard/:type',
+        name: 'dashboard-orders',
+        component: () => import('@/pages/home/[type].vue'),
+        meta: { requiresAuth: true, title: 'Orders', showBackButton: true }
+      },
+      {
         path: 'orders',
         name: 'orders',
         component: () => import('@/pages/orders/index.vue'),
