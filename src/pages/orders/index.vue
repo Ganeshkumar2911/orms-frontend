@@ -17,7 +17,7 @@ const statusOptions = [
   { label: 'Created', value: 'CREATED' },
   { label: 'Approved', value: 'APPROVED' },
   { label: 'Executed', value: 'EXECUTED' },
-  { label: 'Partial Dispatch', value: 'PARTIALLY_DISPATCHED' },
+  // { label: 'Partial Dispatch', value: 'PARTIALLY_DISPATCHED' },
   { label: 'Completed', value: 'COMPLETED' },
   { label: 'Cancelled', value: 'CANCELLED' },
 ]
@@ -26,7 +26,7 @@ const statusClass = {
   CREATED: 'bg-status-created text-slate-900 border-transparent',
   APPROVED: 'bg-status-approved text-white border-transparent',
   EXECUTED: 'bg-status-executed text-white border-transparent',
-  PARTIALLY_DISPATCHED: 'bg-status-partial text-slate-900 border-transparent',
+  // PARTIALLY_DISPATCHED: 'bg-status-partial text-slate-900 border-transparent',
   COMPLETED: 'bg-status-completed text-white border-transparent',
   CANCELLED: 'bg-status-cancelled text-white border-transparent',
 }
@@ -36,7 +36,7 @@ const cardStatusClass = {
   APPROVED: 'border-l-status-approved',
   EXECUTED: 'border-l-status-executed',
   PARTIAL: 'border-l-status-partial',
-  PARTIALLY_DISPATCHED: 'border-l-status-partial',
+  // PARTIALLY_DISPATCHED: 'border-l-status-partial',
   COMPLETED: 'border-l-status-completed',
   CANCELLED: 'border-l-status-cancelled',
 }
@@ -46,7 +46,7 @@ const statusLabels = {
   APPROVED: 'Approved',
   EXECUTED: 'Executed',
   PARTIAL: 'Partial',
-  PARTIALLY_DISPATCHED: 'Partial',
+  // PARTIALLY_DISPATCHED: 'Partial',
   COMPLETED: 'Completed',
   CANCELLED: 'Cancelled',
 }

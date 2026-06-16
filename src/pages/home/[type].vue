@@ -24,7 +24,7 @@ const statusClass = {
   CREATED:              'text-status-created',
   APPROVED:             'text-status-approved',
   EXECUTED:             'text-status-executed',
-  PARTIALLY_DISPATCHED: 'text-status-partial',
+  // PARTIALLY_DISPATCHED: 'text-status-partial',
   COMPLETED:            'text-status-completed',
   CANCELLED:            'text-status-cancelled',
 }

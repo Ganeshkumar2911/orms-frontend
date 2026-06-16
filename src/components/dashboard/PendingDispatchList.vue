@@ -8,7 +8,7 @@ const router = useRouter()
 
 const statusClass = {
   EXECUTED: 'text-status-executed',
-  PARTIALLY_DISPATCHED: 'text-status-partial',
+  // PARTIALLY_DISPATCHED: 'text-status-partial',
 }
 </script>
 
