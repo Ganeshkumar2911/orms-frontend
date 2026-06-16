@@ -87,7 +87,15 @@ const clearAllFilters = () => {
   store.applyFilters()
 }
 
-onMounted(() => store.fetchOrders())
+onMounted(() => {
+  // Clear any filters from previous pages
+  store.filters.search = ''
+  store.filters.status = ''
+  store.filters.partyId = ''
+  store.filters.fromDate = ''
+  store.filters.toDate = ''
+  store.fetchOrders()
+})
 </script>
 
 <template>

@@ -8,7 +8,7 @@ const router = useRouter()
 
 const cards = [
   { key: 'waitingApproval',  label: 'Waiting Approval',  icon: Clock,        color: 'text-primary-yellow', route: 'waiting-approval'  },
-  { key: 'waitingExecution', label: 'Waiting Execution', icon: Zap,          color: 'text-primary-blue',   route: 'waiting-execution' },
+  { key: 'waitingExecution', label: 'Waiting Execution', icon: Zap,          color: 'text-primary-accent',   route: 'waiting-execution' },
   { key: 'pendingDispatch',  label: 'Pending Dispatch',  icon: Truck,        color: 'text-status-partial', route: 'pending-dispatch'  },
   { key: 'completedToday',   label: 'Completed Today',   icon: CheckCircle2, color: 'text-primary-green',  route: 'completed-today'   },
 ]
