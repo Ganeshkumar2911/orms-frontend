@@ -79,7 +79,7 @@ onMounted(() => load())
       </div>
     </div>
 
-    <BasePagination :pagination="store.pagination" @change="load($event)" />
+    <BasePagination :pagination="{ currentPage: store.pagination.page, totalPages: store.pagination.total_pages }" @change="load($event)" />
 
   </div>
 </template>

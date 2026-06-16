@@ -2,9 +2,11 @@
 import { ref, watch } from 'vue'
 import { X, Plus, Trash2 } from 'lucide-vue-next'
 import { useOrdersStore } from '@/stores/orders/orders'
+import { useSnackbarStore } from '@/stores/snackbar/snackbar'
 import BaseSelect from '@/components/common/BaseSelect.vue'
 
 const store = useOrdersStore()
+const snackbar = useSnackbarStore()
 
 const form = ref({ party: null, transport: null, items: [{ product: null, orderedQty: '', price: '' }] })
 const errors = ref({})
@@ -39,6 +41,9 @@ const validate = () => {
     if (!item.price || Number(item.price) <= 0) e[`price_${i}`] = true
   })
   errors.value = e
+  if (Object.keys(e).length > 0) {
+    snackbar.show('Please fill all required fields', 'error')
+  }
   return !Object.keys(e).length
 }
 
