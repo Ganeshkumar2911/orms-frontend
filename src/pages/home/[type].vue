@@ -13,7 +13,7 @@ const store = useOrdersStore()
 const typeMap = {
   'waiting-approval':  { status: 'CREATED',   label: 'Waiting Approval'  },
   'waiting-execution': { status: 'APPROVED',  label: 'Waiting Execution' },
-  'pending-dispatch':  { status: 'PENDING',   label: 'Pending Dispatch'  },
+  'pending-dispatch':  { status: 'EXECUTED',   label: 'Pending Dispatch'  },
   'completed-today':   { status: 'DISPATCHED',label: 'Completed Today'   },
 }
 
