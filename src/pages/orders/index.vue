@@ -23,13 +23,12 @@ const statusOptions = [
 ]
 
 const statusClass = {
-  CREATED: 'text-status-created border-status-created/30 bg-status-created/5',
-  APPROVED: 'text-status-approved border-status-approved/30 bg-status-approved/5',
-  EXECUTED: 'text-status-executed border-status-executed/30 bg-status-executed/5',
-  PARTIAL: 'text-status-partial border-status-partial/30 bg-status-partial/5',
-  PARTIALLY_DISPATCHED: 'text-status-partial border-status-partial/30 bg-status-partial/5',
-  COMPLETED: 'text-status-completed border-status-completed/30 bg-status-completed/5',
-  CANCELLED: 'text-status-cancelled border-status-cancelled/30 bg-status-cancelled/5',
+  CREATED: 'bg-status-created text-slate-900 border-transparent',
+  APPROVED: 'bg-status-approved text-white border-transparent',
+  EXECUTED: 'bg-status-executed text-white border-transparent',
+  PARTIALLY_DISPATCHED: 'bg-status-partial text-slate-900 border-transparent',
+  COMPLETED: 'bg-status-completed text-white border-transparent',
+  CANCELLED: 'bg-status-cancelled text-white border-transparent',
 }
 
 const cardStatusClass = {
@@ -208,10 +207,7 @@ onMounted(() => {
         <!-- Row 1: Order Number + Status -->
         <div class="flex items-center justify-between">
           <span class="mid-text text-primary-text font-medium">{{ order.orderNumber }}</span>
-          <span
-            class="label-text px-2 py-0.5 rounded-lg border font-semibold"
-            :class="statusClass[order.status] || 'text-secondary-text border-primary-border'"
-          >
+          <span :class="statusClass[order.status] || 'border-primary-border'" class=" text-sm px-2 py-0.5 border rounded-lg font-bold">
             {{ statusLabels[order.status] || order.status }}
           </span>
         </div>

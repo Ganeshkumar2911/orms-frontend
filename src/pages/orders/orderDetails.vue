@@ -67,12 +67,12 @@ const stageState = (i) => {
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 const statusClass = {
-  CREATED: 'text-status-created border-status-created/30 bg-status-created/5',
-  APPROVED: 'text-status-approved border-status-approved/30 bg-status-approved/5',
-  EXECUTED: 'text-status-executed border-status-executed/30 bg-status-executed/5',
-  PARTIALLY_DISPATCHED: 'text-status-partial border-status-partial/30 bg-status-partial/5',
-  COMPLETED: 'text-status-completed border-status-completed/30 bg-status-completed/5',
-  CANCELLED: 'text-status-cancelled border-status-cancelled/30 bg-status-cancelled/5',
+  CREATED: 'bg-status-created text-slate-900 border-transparent',
+  APPROVED: 'bg-status-approved text-white border-transparent',
+  EXECUTED: 'bg-status-executed text-white border-transparent',
+  PARTIALLY_DISPATCHED: 'bg-status-partial text-slate-900 border-transparent',
+  COMPLETED: 'bg-status-completed text-white border-transparent',
+  CANCELLED: 'bg-status-cancelled text-white border-transparent',
 }
 
 const statusLabels = {
@@ -165,7 +165,7 @@ const doConfirm = () => {
       <div class="bg-card-background border border-primary-border rounded-lg p-4 flex flex-col gap-3">
         <div class="flex items-center justify-between">
           <span class="title-text text-primary-text">{{ order.orderNumber }}</span>
-          <span :class="statusClass[status] || 'text-secondary-text border-primary-border'" class="label-text px-2 py-0.5 border rounded-full font-semibold">
+          <span :class="statusClass[status] || 'border-primary-border'" class=" text-sm px-2 py-0.5 border rounded-lg font-bold">
             {{ statusLabels[status] || status }}
           </span>
         </div>
