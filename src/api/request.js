@@ -27,6 +27,10 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+     console.log("FULL ERROR", error);
+      console.log("STATUS", error.response?.status);
+      console.log("MESSAGE", error.message);
+
     // Handle Unauthorized
     if (error.response?.status === 401) {
 
