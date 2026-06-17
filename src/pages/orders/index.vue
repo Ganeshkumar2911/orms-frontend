@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ShoppingCart, Search, Plus, X } from 'lucide-vue-next'
+import { ShoppingCart, Search, Plus, X, Calendar } from 'lucide-vue-next'
 import { useOrdersStore } from '@/stores/orders/orders'
 
 import CreateOrderDialog from '@/components/orders/CreateOrderDialog.vue'
@@ -155,33 +155,46 @@ onMounted(() => {
       <div class="flex gap-2 items-end">
         <div class="flex-1 min-w-0">
           <label class="label-text text-secondary-text block mb-1">From</label>
-          <input
-            v-model="store.filters.fromDate"
-            type="date"
-            class="input-field w-full text-xs sm:text-sm px-2 sm:px-3 h-10"
-            @change="onFilterChange(true)"
-          />
+          <div class="input-field w-full h-10 relative overflow-hidden flex items-center justify-between px-2 sm:px-3 cursor-pointer">
+            <span class="text-xs sm:text-sm truncate" :class="store.filters.fromDate ? 'text-primary-text' : 'text-secondary-text'">
+              {{ store.filters.fromDate ? formatDate(store.filters.fromDate) : 'dd/mm/yyyy' }}
+            </span>
+            <Calendar :size="14" class="shrink-0 text-secondary-text" />
+            <input
+              v-model="store.filters.fromDate"
+              type="date"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              @change="onFilterChange(true)"
+            />
+          </div>
         </div>
+
         <div class="flex-1 min-w-0">
           <label class="label-text text-secondary-text block mb-1">To</label>
-          <input
-            v-model="store.filters.toDate"
-            type="date"
-            class="input-field w-full text-xs sm:text-sm px-2 sm:px-3 h-10"
-            @change="onFilterChange(true)"
-          />
+          <div class="input-field w-full h-10 relative overflow-hidden flex items-center justify-between px-2 sm:px-3 cursor-pointer">
+            <span class="text-xs sm:text-sm truncate" :class="store.filters.toDate ? 'text-primary-text' : 'text-secondary-text'">
+              {{ store.filters.toDate ? formatDate(store.filters.toDate) : 'dd/mm/yyyy' }}
+            </span>
+            <Calendar :size="14" class="shrink-0 text-secondary-text" />
+            <input
+              v-model="store.filters.toDate"
+              type="date"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              @change="onFilterChange(true)"
+            />
+          </div>
         </div>
-        <!-- Clear Filters (inline) -->
-        <button
-          v-if="hasFilters"
-          @click="clearAllFilters"
-          class="h-10 px-2.5 rounded-lg border border-primary-red/25 text-primary-red hover:bg-primary-red/5 font-semibold text-xs shrink-0 flex items-center gap-1 transition-all duration-150 cursor-pointer"
-          title="Clear all filters"
-        >
-          <X :size="14" />
-          Clear
-        </button>
-      </div>
+
+  <button
+    v-if="hasFilters"
+    @click="clearAllFilters"
+    class="h-10 px-2.5 rounded-lg border border-primary-red/25 text-primary-red hover:bg-primary-red/5 font-semibold text-xs shrink-0 flex items-center gap-1 transition-all duration-150 cursor-pointer"
+    title="Clear all filters"
+  >
+    <X :size="14" />
+    Clear
+  </button>
+</div>
     </div>
 
     <!-- Loading -->
