@@ -29,7 +29,11 @@ axiosInstance.interceptors.response.use(
 
     // Handle Unauthorized
     if (error.response?.status === 401) {
-      router.push({ name: "login" });
+
+      console.log("401 INTERCEPTOR HIT");
+
+      router.push('/login');
+
       return Promise.reject(error);
     }
 
