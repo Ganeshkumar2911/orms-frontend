@@ -2,8 +2,8 @@ import axios from "axios";
 import router from "../router";
 
 // ─── Constants
-
-const BASE_URL = "https://backend-oms.vercel.app/api/";
+const BASE_URL = "/api";
+// const BASE_URL = "https://backend-oms.vercel.app/api/";
 // const BASE_URL = "http://localhost:3000/api/";
 const DEFAULT_TIMEOUT = 30_000;
 const MAX_RETRY_ATTEMPTS = 2;
