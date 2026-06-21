@@ -8,6 +8,7 @@ import { useUserStore } from '@/stores/profile/profile'
 import apiRequest from '@/api/request'
 import urls from '@/api/urls'
 import { useSnackbarStore } from '@/stores/snackbar/snackbar'
+import { getFCMToken } from '@/utils/fcm'
 
 const userStore = useUserStore()
 const snackbar = useSnackbarStore()
@@ -20,7 +21,37 @@ const logoutLoading = ref(false)
 
 onMounted(() => {
   userStore.fetchProfile()
+  saveFCMToken()
 })
+
+const saveFCMToken = async () => {
+  const token = await getFCMToken()
+
+  // alert(token || "TOKEN IS NULL");alert(`Secure Context: ${window.isSecureContext}`);
+
+  if (!token) return
+
+  const successHandler = () => {
+    snackbar.show('FCM token saved successfully', 'success')
+  }
+
+  const failureHandler = (err) => {
+    snackbar.show(err?.message || 'Failed to save FCM token', 'error')
+  }
+
+  apiRequest(
+    urls.KEYS.POST,
+    urls.auth.saveFMC,
+    {
+      data: {
+        token: token,
+      },
+      isTokenRequired: true,
+      onSuccess: successHandler,
+      onFailure: failureHandler,
+    }
+  )
+}
 
 const handleThemeToggle = () => {
   theme.value = toggleTheme()
